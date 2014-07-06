@@ -1,0 +1,36 @@
+
+public class ArrayHelper {
+
+	public static double getMinDouble(double[] array){
+		
+		double min = (double) Integer.MAX_VALUE;
+		
+		for(int i = 0; i < array.length; i++){
+			if(array[i] < min) min = array[i];
+		}
+		
+		return min;
+	}
+	
+	public static double getMaxDouble(double[] array){
+		
+		double max = 0;
+		
+		for(int i = 0; i < array.length; i++){
+			if(array[i] > max) max = array[i];
+		}
+		
+		return max;
+	}
+	
+	public static double intToDouble(int[] array){
+		double[] d_array = new double[array.length];
+		
+		for(int i = 0; i < array.length; i++){
+			d_array[i] = array[i];
+		}
+		
+		return d_array;
+	}
+	
+}

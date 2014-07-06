@@ -1,0 +1,87 @@
+
+public class Threshold {
+	
+	public static int[][] optimal(int[][] matrix){
+		
+		int[][] binarized = null;
+		double[] t_results = new double[256];
+		
+		//Stats
+		int zeroCount = 0;
+		int oneCount = 0;
+		double zeroMean = 0;
+		double oneMean = 0;
+		double diff = 0;
+		double result = 0;
+		double t_opt = 0;
+		
+		//for every threshold
+		for(int t = 0; t < 256; t++){
+			
+			//binarize, store in binarized
+			System.arraycopy(Threshold.binarize(matrix, t), 0, binarized, 0, matrix.length);
+			
+			//count total 1s and 0s
+			oneCount = Threshold.countOnes(binarized);
+			zeroCount = Threshold.countZeros(binarized);
+			
+			//find mean intensity value of each group
+			oneMean = oneCount/255;
+			zeroMean = zeroCount/255;
+			
+			//square the diff between the two means
+			diff = Math.pow((oneMean - zeroMean), 2);
+			
+			//product of number of pixels in foreground and number of pixels in background and result from 3rd step.
+			result = oneCount*zeroCount*diff;
+			
+			//store results for each T
+			t_results[t] = result;
+		}
+		
+		//optimal t is
+		t_opt = ArrayHelper.getMaxDoubleIndex(t_results);
+		System.out.println("Opt: " + t_opt);
+		
+		return matrix;
+	}
+	
+	private static int[][] binarize(int[][] image, int t){
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image[i].length; j++){
+				if (image[i][j] > t){
+					image[i][j] = 255;
+				} else {
+					image[i][j] = 0;
+				}
+			}
+		}
+		return image;
+	}
+	
+	private static int countOnes(int[][] image){
+		int count = 0;
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image.length; j++){
+				if(image[i][j] == 255) count++;
+			}
+		}
+		
+		return count;
+	}
+
+	private static int countZeros(int[][] image){
+		int count = 0;
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image.length; j++){
+				if(image[i][j] == 0) count++;
+			}
+		}
+		
+		return count;
+	}
+
+}

@@ -1,0 +1,21 @@
+import java.io.IOException;
+
+import javax.swing.JFrame;
+
+
+public class Main {
+
+	public static void main(String args[]) throws IOException{
+		System.out.println(System.getProperty("user.dir"));
+		ImgHist image1 = new ImgHist("Images/building.jpg");
+		//image1.printMatrix();
+		image1.printHistogram();
+		
+		JFrame frame = new JFrame();
+		JImageComponent ic = new JImageComponent(image1.myImg);
+		frame.getContentPane().add(ic);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}

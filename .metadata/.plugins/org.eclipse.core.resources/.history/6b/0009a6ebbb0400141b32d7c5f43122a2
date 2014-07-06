@@ -1,0 +1,137 @@
+import java.awt.image.BufferedImage;
+
+
+public class Threshold {
+	
+	public static BufferedImage getOptimalImage(BufferedImage image, int[][] matrix){
+		
+		BufferedImage image_new = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		int t_optimal = Threshold.optimal(matrix);
+		System.out.println(t_optimal);
+		
+		//apply transformation on the matrix of the image
+		for(int i = 0; i < matrix.length; i++){
+			for(int j = 0; j < matrix[i].length; j++){
+				if (matrix[i][j] > t_optimal) image_new.getRaster().setDataElements(i, j, new byte[]{(byte) 0x00});
+				else image_new.getRaster().setDataElements(i, j, new byte[]{(byte) 0xff});
+			}
+		}
+		
+		return image_new;
+	}
+	
+	public static double[] getBinaryHistogram(BufferedImage image){
+		double[] x = new double[2];
+		int oneCount = 0;
+		int zeroCount = 0;
+		
+		for(int i = 0; i < image.getWidth(); i++){
+			for(int j = 0; j < image.getHeight(); j++){
+				byte p;
+				image.getRaster().getDataElements(i, j, p);
+				if ( (p) < (byte) 0xFF) zeroCount++;
+				else oneCount++;
+			}
+		}
+		
+		x[0] = zeroCount;
+		x[1] = oneCount;
+		
+		System.out.println("zero: " + zeroCount);
+		System.out.println("ones: " + oneCount);
+		
+		return x;
+	}
+	
+	public static int optimal(int[][] matrix){
+		
+		int[][] binarized = null;
+		double[] t_results = new double[256];
+		
+		//Stats
+		double zeroCount = 0;
+		double oneCount = 0;
+		double zeroMean = 0;
+		double oneMean = 0;
+		double diff = 0;
+		double result = 0;
+		double t_opt = 0;
+		
+		//for every threshold
+		for(int t = 0; t < 256; t++){
+			int[][] temp = new int[matrix.length][];
+			
+			//copy original to temp
+			for(int i = 0; i < matrix.length; i++){
+				temp[i] = matrix[i].clone();
+			}
+			
+			//binarize, store in binarized
+			Threshold.binarize(temp, t);
+			
+			//count total 1s and 0s
+			oneCount = Threshold.countOnes(temp);
+			zeroCount = Threshold.countZeros(temp);
+			
+			//find mean intensity value of each group
+			oneMean = oneCount/255;
+			zeroMean = zeroCount/255;
+			
+			//square the diff between the two means
+			diff = Math.pow((oneMean - zeroMean), 2);
+			
+			//product of number of pixels in foreground and number of pixels in background and result from 3rd step.
+			result = ( (oneCount/1000) * (zeroCount/1000) * diff/1000);
+			
+			System.out.println("t: " + t + ", val: " + result);
+			
+			//store results for each T
+			t_results[t] = result;
+		}
+		
+		//optimal t is
+		t_opt = ArrayHelper.getMaxDoubleIndex(t_results);
+		
+		return (int) t_opt;
+	}
+	
+	private static void binarize(int[][] image, int t){
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image[i].length; j++){
+				if (image[i][j] > t){
+					image[i][j] = 255;
+				} else {
+					image[i][j] = 0;
+				}
+				
+				//System.out.println("index: " + i + ", value: " + image[i][j]);
+			}
+		}
+	}
+	
+	private static int countOnes(int[][] image){
+		int count = 0;
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image[i].length; j++){
+				if(image[i][j] == 255) count++;
+			}
+		}
+		
+		return count;
+	}
+
+	private static int countZeros(int[][] image){
+		int count = 0;
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image[i].length; j++){
+				if(image[i][j] == 0) count++;
+			}
+		}
+		
+		return count;
+	}
+
+}

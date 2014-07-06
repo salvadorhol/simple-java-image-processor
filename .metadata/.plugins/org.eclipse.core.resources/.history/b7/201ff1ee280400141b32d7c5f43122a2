@@ -1,0 +1,32 @@
+
+import java.awt.GridLayout;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.math.*;
+
+
+public class Main {
+
+	public static void main(String args[]) throws IOException{
+		System.out.println(System.getProperty("user.dir"));
+		ImgHist image1 = new ImgHist("Images/building.jpg");
+		//image1.printMatrix();
+		image1.printHistogram();
+		
+		JFrame frame = new JFrame();
+		JPanel panel = new JPanel();
+		frame.setLayout(new GridLayout(1, 2));
+		frame.getContentPane().add(new JLabel(new ImageIcon(image1.getEqualImage())));
+		frame.getContentPane().add(new JLabel(new ImageIcon(image1.getOriginalImage())));
+		panel.addHistogramPlot("histogram", new double[]{0, 0.1}, 50);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1400, 800);
+		frame.setVisible(true);
+	}
+}

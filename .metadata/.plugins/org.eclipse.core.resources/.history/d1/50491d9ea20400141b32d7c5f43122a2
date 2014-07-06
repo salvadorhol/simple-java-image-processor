@@ -1,0 +1,28 @@
+
+public class Threshold {
+	
+	public static int[][] optimal(int[][] image){
+		
+		int[][] t_optimal = null;
+		int[][] result = null;
+		
+		
+		
+		
+		return t_optimal;
+	}
+	
+	private static int[][] binarize(int[][] image, int t){
+		
+		int[][] binarized = null;
+		
+		for(int i = 0; i < image.length; i++){
+			for(int j = 0; j < image[i].length; j++){
+				
+				
+				
+			}
+		}
+		
+	}
+}

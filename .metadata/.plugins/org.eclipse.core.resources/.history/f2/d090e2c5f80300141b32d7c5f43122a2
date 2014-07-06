@@ -1,0 +1,11 @@
+import java.io.IOException;
+
+
+public class Main {
+
+	public static void main(String args[]) throws IOException{
+		System.out.println(System.getProperty("user.dir"));
+		ImgHist image1 = new ImgHist("Images/building.jpg");
+		image1.printMatrix();
+	}
+}

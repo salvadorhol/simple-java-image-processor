@@ -1,0 +1,48 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+
+public class ImgHist {
+	
+	private BufferedImage myImg;
+	private File imgFile;
+	private int[][] imgMatrix;
+	
+	//constructor
+	public ImgHist(String fileName) throws IOException{
+		this.imgFile = new File(fileName);
+		this.myImg = ImageIO.read(imgFile);
+		
+		//set to gray type
+		this.myImg = new BufferedImage(this.myImg.getWidth(), this.myImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		
+		//define matrix
+		this.imgMatrix = new int[this.myImg.getWidth()][];
+		
+		for (int i = 0; i < this.myImg.getWidth(); i++){
+			this.imgMatrix[i] = new int[this.myImg.getHeight()];
+			
+			for (int j = 0; j < this.myImg.getHeight(); j++){
+				Color c = new Color(this.imgMatrix[i][j]);
+				this.imgMatrix[i][j] = c.getRGB();
+			}
+		}
+	}
+	
+	//return's byte matrix array with pixel values
+	public int getGrayIntesity(){
+//		int[][] gray = new int[this.myImg.getWidth()][];
+//		
+//		for (int i = 0)
+//		
+//		return gray;
+		
+	}
+	
+	
+	
+}

@@ -1,0 +1,9 @@
+
+static class ArrayHelper {
+
+	public static int getMin(int[] array){
+		return 0;
+		
+	}
+	
+}

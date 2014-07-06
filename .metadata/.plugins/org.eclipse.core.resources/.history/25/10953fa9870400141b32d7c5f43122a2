@@ -1,0 +1,71 @@
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.math.plot.Plot2DPanel;
+
+public class Main {
+
+	public static void main(String args[]) throws IOException{
+		System.out.println(System.getProperty("user.dir"));
+		ImgHist image1 = new ImgHist("Images/building.jpg");
+		//image1.printMatrix();
+		//image1.printHistogram();
+		
+		JFrame frame = new JFrame();
+		frame.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		frame.getContentPane().add(new JLabel("Original Image"), c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		frame.getContentPane().add(new JLabel("Equalized Image"), c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		frame.getContentPane().add(new JLabel(new ImageIcon(image1.getOriginalImage())), c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		frame.getContentPane().add(new JLabel(new ImageIcon(image1.getEqualImage())), c);
+		
+		//histograms
+		double[] x = new double[256]; 
+		for(int i = 0; i < 256; i++){
+			x[i] = i;
+		}
+		
+		Plot2DPanel plot1 = new Plot2DPanel();
+		plot1.addBarPlot("Original", x, ArrayHelper.intToDouble(image1.getHistogramOriginal()));
+		
+		Plot2DPanel plot2 = new Plot2DPanel();
+		plot2.addBarPlot("Equalized", x, ArrayHelper.intToDouble(image1.getHistogramEqal()));
+		
+		
+		JFrame originalPlot = new JFrame();
+		originalPlot.setSize(600, 600);
+		originalPlot.setContentPane(plot);
+		originalPlot.setVisible(true);
+		
+		JFrame eqalPlot = new JFrame();
+		eqalPlot.setSize(600, 600);
+		eqalPlot.setContentPane(plot);
+		eqalPlot.setVisible(true);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1400, 650);
+		frame.setVisible(true);
+	}
+}
